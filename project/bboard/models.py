@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Bb(models.Model):
@@ -24,3 +25,27 @@ class Rubric(models.Model):
         verbose_name_plural = 'Рубрики'
         verbose_name = 'Рубрика'
         ordering = ['name']
+
+
+class AdvUser(models.Model):
+    """
+    Доп. сведения о зареганном пользователе
+    связь 1к1
+    """
+    is_activated = models.BooleanField(default=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+
+class Spare(models.Model):
+    """
+    связь многие ко многим (ведомая)
+    """
+    name = models.CharField(max_length=30)
+
+
+class Machine(models.Model):
+    """
+    связь многие ко многим (ведущая)
+    """
+    name = models.CharField(max_length=30)
+    spares = models.ManyToManyField(Spare)
